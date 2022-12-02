@@ -22,7 +22,7 @@ def create_day(directory):
 
     if not os.path.exists(f:=os.path.join(directory, 'solution.py')):
         with open(f, "w", encoding='utf-8') as f:
-            f.write("""with open('data.txt') as f:
+            f.write("""with open('data.txt', encoding='utf-8') as f:
     data = f.readlines()""") # Generate template
     if not os.path.exists(f:=os.path.join(directory, 'data.txt')):
         with open(f, "w", encoding='utf-8') as _:
