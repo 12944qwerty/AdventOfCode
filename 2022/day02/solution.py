@@ -12,25 +12,27 @@ X = Lose, Y = Draw, Z = Win
 Part 2: Get the total amount of points based on the win/lose choices given
 """
 
-with open('data.txt', encoding='utf-8') as f:
-    data = [a.split() for a in f.readlines()]
+def parse_data(f):
+    return [a.split() for a in f.readlines()]
 
-total = 0
+def part1(data):
+    total = 0
 
-for a,b in data:
-    total += "XYZ".index(b) + 1
-    total += "AX BY CZ AY BZ CX AY BZ CX".count(a+b) * 3
+    for a,b in data:
+        total += "XYZ".index(b) + 1
+        total += "AX BY CZ AY BZ CX AY BZ CX".count(a+b) * 3
 
-print("Part 1:", total)
+    return total
 
-total = 0
+def part2(data):
+    total = 0
 
-for a,b in data:
-    if b == 'X': # lose
-        total += "BCA".index(a) + 1
-    elif b == 'Y': # tie
-        total += 4 + "ABC".index(a)
-    else: # win
-        total += 7 + "CAB".index(a)
-
-print("Part 2:", total)
+    for a,b in data:
+        if b == 'X': # lose
+            total += "BCA".index(a) + 1
+        elif b == 'Y': # tie
+            total += 4 + "ABC".index(a)
+        else: # win
+            total += 7 + "CAB".index(a)
+    
+    return total
