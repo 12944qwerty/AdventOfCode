@@ -56,9 +56,12 @@ def part2():
     except Exception as e:
         print(e)
 
-    if not os.path.exists(f:=os.path.join(directory, 'dummy.txt')):
-        with open(f, "w", encoding='utf-8') as f:
-            f.write("")
+    try:
+        if not os.path.exists(f:=os.path.join(directory, 'dummy.txt')):
+            with open(f, "w", encoding='utf-8') as f:
+                f.write(puzzle.example_data)
+    except Exception as e:
+        print(e)
 
 
 def format_time(dt): # https://github.com/python/cpython/blob/main/Lib/timeit.py#L339-L351
