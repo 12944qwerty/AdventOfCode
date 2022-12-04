@@ -40,8 +40,8 @@ Part 1:
 Part 2: 
 \"\"\"
 
-with open('data.txt', encoding='utf-8') as f:
-    data = f.read()
+def parse_data(f):
+    return f.read().splitlines()
     
 def part1():
     pass
