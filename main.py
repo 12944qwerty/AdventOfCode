@@ -4,15 +4,16 @@ import sys
 import importlib
 from timeit import timeit
 import time
-import datetime
+from datetime import datetime, timezone, timedelta
 
 from dotenv import load_dotenv
-load_dotenv()
 
 import aocd
 from aocd.models import Puzzle
 
-today = datetime.date.today()
+load_dotenv()
+
+today = datetime.now(timezone(-timedelta(hours=5))) # EST
 if today.month != 12:
     pass
 
@@ -101,7 +102,7 @@ elif 0 < arguments.day < 26:
 
     time1 = timeit('part1(data)', number=100, globals=globals())/100
     time2 = timeit('part2(data)', number=100, globals=globals())/100
-    
+
     print("Part 1:", part1(data), "- Timing:", format_time(time1))
     print("Part 1:", part2(data), "- Timing:", format_time(time2))
 
