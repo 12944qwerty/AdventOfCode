@@ -5,6 +5,7 @@ import importlib
 from timeit import timeit
 import time
 from datetime import datetime, timezone, timedelta
+from copy import deepcopy
 
 from dotenv import load_dotenv
 
@@ -21,6 +22,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--year', '-y', nargs='?', default=today.year, type=int)
 parser.add_argument('--day', '-d', nargs='?', default=[None,today.day][today.month == 12], type=int)
 parser.add_argument('--create', '-c', action='store_true', help="Just creates the folder")
+parser.add_argument('--testing', '-t', action='store_true', help="Only run dummy.txt")
 
 arguments = parser.parse_args()
 
@@ -43,10 +45,10 @@ Part 2:
 def parse_data(f):
     return f.read().splitlines()
     
-def part1():
+def part1(data):
     pass
 
-def part2():
+def part2(data):
     pass
 """) # Generate template
 
@@ -103,33 +105,37 @@ elif 0 < arguments.day < 26:
     with open(os.path.join(dir_, 'dummy.txt'), "r", encoding='utf-8') as f:
         data = parse_data(f)
 
-    time1 = timeit('part1(data)', number=100, globals=globals())/100
-    time2 = timeit('part2(data)', number=100, globals=globals())/100
-
-    print("Part 1:", part1(data), "- Timing:", format_time(time1))
-    print("Part 1:", part2(data), "- Timing:", format_time(time2))
-
-    print("\nReal Data")
-    with open(os.path.join(dir_, 'data.txt'), "r", encoding='utf-8') as f:
-        data = parse_data(f)
-
     start = time.time()
-    ans1 = part1(data)
+    ans1 = part1(deepcopy(data))
     time1 = time.time() - start
-    ans1 = part1(data)
-    try:
-        solved1 = puzzle._get_answer('a')
-    except aocd.exceptions.PuzzleUnsolvedError:
-        solved1 = None
-    print("Part 1:", ans1, "- Timing:", format_time(time1), ["❌", "✅"][str(solved1) == str(ans1)])
+    print("Part 1:", ans1, "- Timing:", format_time(time1))
 
     start = time.time()
-    ans2 = part2(data)
+    ans2 = part2(deepcopy(data))
     time2 = time.time() - start
-    try:
-        solved2 = puzzle._get_answer('b')
-    except aocd.exceptions.PuzzleUnsolvedError:
-        solved2 = None
-    print("Part 2:", ans2, "- Timing:", format_time(time2), ["❌", "✅"][str(solved2) == str(ans2)])
+    print("Part 2:", ans2, "- Timing:", format_time(time2))
+
+    if not arguments.testing:
+        print("\nReal Data")
+        with open(os.path.join(dir_, 'data.txt'), "r", encoding='utf-8') as f:
+            data = parse_data(f)
+
+        start = time.time()
+        ans1 = part1(deepcopy(data))
+        time1 = time.time() - start
+        try:
+            solved1 = puzzle._get_answer('a')
+        except aocd.exceptions.PuzzleUnsolvedError:
+            solved1 = None
+        print("Part 1:", ans1, "- Timing:", format_time(time1), ["❌", "✅"][str(solved1) == str(ans1)])
+
+        start = time.time()
+        ans2 = part2(deepcopy(data))
+        time2 = time.time() - start
+        try:
+            solved2 = puzzle._get_answer('b')
+        except aocd.exceptions.PuzzleUnsolvedError:
+            solved2 = None
+        print("Part 2:", ans2, "- Timing:", format_time(time2), ["❌", "✅"][str(solved2) == str(ans2)])
 else:
     raise Exception("Day flag must be specified")
