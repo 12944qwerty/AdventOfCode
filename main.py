@@ -44,7 +44,7 @@ Part 2:
 
 def parse_data(f):
     return f.read().splitlines()
-    
+
 def part1(data):
     pass
 
