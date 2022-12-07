@@ -23,6 +23,7 @@ parser.add_argument('--year', '-y', nargs='?', default=today.year, type=int)
 parser.add_argument('--day', '-d', nargs='?', default=[None,today.day][today.month == 12], type=int)
 parser.add_argument('--create', '-c', action='store_true', help="Just creates the folder")
 parser.add_argument('--testing', '-t', action='store_true', help="Only run dummy.txt")
+parser.add_argument('--visual', '-v', action='store_true', help="Run the visualization")
 
 arguments = parser.parse_args()
 
@@ -100,42 +101,63 @@ elif 0 < arguments.day < 26:
     parse_data = sol.parse_data
     part1 = sol.part1
     part2 = sol.part2
-
     print("Dummy Data")
     with open(os.path.join(dir_, 'dummy.txt'), "r", encoding='utf-8') as f:
         data = parse_data(f)
 
-    start = time.time()
-    ans1 = part1(deepcopy(data))
-    time1 = time.time() - start
-    print("Part 1:", ans1, "- Timing:", format_time(time1))
-
-    start = time.time()
-    ans2 = part2(deepcopy(data))
-    time2 = time.time() - start
-    print("Part 2:", ans2, "- Timing:", format_time(time2))
-
-    if not arguments.testing:
-        print("\nReal Data")
-        with open(os.path.join(dir_, 'data.txt'), "r", encoding='utf-8') as f:
-            data = parse_data(f)
+    if not arguments.visual:
+        spec = importlib.util.spec_from_file_location('solution', file)
+        sol = importlib.util.module_from_spec(spec)
+        sys.modules['solution'] = sol
+        spec.loader.exec_module(sol)
+        parse_data = sol.parse_data
+        part1 = sol.part1
+        part2 = sol.part2
 
         start = time.time()
         ans1 = part1(deepcopy(data))
         time1 = time.time() - start
-        try:
-            solved1 = puzzle._get_answer('a')
-        except aocd.exceptions.PuzzleUnsolvedError:
-            solved1 = None
-        print("Part 1:", ans1, "- Timing:", format_time(time1), ["❌", "✅"][str(solved1) == str(ans1)])
+        print("Part 1:", ans1, "- Timing:", format_time(time1))
 
         start = time.time()
         ans2 = part2(deepcopy(data))
         time2 = time.time() - start
-        try:
-            solved2 = puzzle._get_answer('b')
-        except aocd.exceptions.PuzzleUnsolvedError:
-            solved2 = None
-        print("Part 2:", ans2, "- Timing:", format_time(time2), ["❌", "✅"][str(solved2) == str(ans2)])
+        print("Part 2:", ans2, "- Timing:", format_time(time2))
+
+        if not arguments.testing:
+            print("\nReal Data")
+            with open(os.path.join(dir_, 'data.txt'), "r", encoding='utf-8') as f:
+                data = parse_data(f)
+
+            start = time.time()
+            ans1 = part1(deepcopy(data))
+            time1 = time.time() - start
+            try:
+                solved1 = puzzle._get_answer('a')
+            except aocd.exceptions.PuzzleUnsolvedError:
+                solved1 = None
+            print("Part 1:", ans1, "- Timing:", format_time(time1), ["❌", "✅"][str(solved1) == str(ans1)])
+
+            start = time.time()
+            ans2 = part2(deepcopy(data))
+            time2 = time.time() - start
+            try:
+                solved2 = puzzle._get_answer('b')
+            except aocd.exceptions.PuzzleUnsolvedError:
+                solved2 = None
+            print("Part 2:", ans2, "- Timing:", format_time(time2), ["❌", "✅"][str(solved2) == str(ans2)])
+    else:
+        if not arguments.testing:
+            with open(os.path.join(dir_, 'data.txt'), "r", encoding='utf-8') as f:
+                data = parse_data(f)
+
+        file = os.path.join(dir_, 'visual.py')
+        spec = importlib.util.spec_from_file_location('visual', file)
+        vis = importlib.util.module_from_spec(spec)
+        sys.modules['visual'] = vis
+        spec.loader.exec_module(vis)
+        visual = vis.main
+
+        visual(data, arguments.testing * 0.1)
 else:
     raise Exception("Day flag must be specified")
