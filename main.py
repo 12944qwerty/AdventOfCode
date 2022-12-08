@@ -34,6 +34,10 @@ def create_day(directory, flags, puzzle):
         print(f"Creating directory: {directory}")
         os.mkdir(directory)
 
+    if not os.path.exists(d:=os.path.join('data', directory)):
+        print(f"Creating data directory: {d}")
+        os.mkdir(d)
+
     if not os.path.exists(f:=os.path.join(directory, 'solution.py')):
         with open(f, "w", encoding='utf-8') as f:
             f.write(f"""\"\"\"
@@ -54,13 +58,13 @@ def part2(data):
 """) # Generate template
 
     try:
-        with open(os.path.join(directory, 'data.txt'), "w", encoding='utf-8') as f: # aocd caches so no unnecessary requests done
+        with open(os.path.join('data', directory, 'data.txt'), "w", encoding='utf-8') as f: # aocd caches so no unnecessary requests done
             f.write(puzzle.input_data)
     except Exception as e:
         print(e)
 
     try:
-        if not os.path.exists(f:=os.path.join(directory, 'dummy.txt')):
+        if not os.path.exists(f:=os.path.join('data', directory, 'dummy.txt')):
             with open(f, "w", encoding='utf-8') as f:
                 f.write(puzzle.example_data)
     except Exception as e:
@@ -80,14 +84,16 @@ def format_time(dt): # https://github.com/python/cpython/blob/main/Lib/timeit.py
 
 puzzle = Puzzle(arguments.year, arguments.day)
 
+day = str(arguments.day).zfill(2)
+
 if arguments.create:
     assert arguments.year > 2015
     assert 0 < arguments.day < 26
 
-    dir_ = os.path.join(os.getcwd(), str(arguments.year), 'day' + str(arguments.day).zfill(2))
+    dir_ = os.path.join(str(arguments.year), 'day' + day)
     create_day(dir_, arguments, puzzle)
 elif 0 < arguments.day < 26:
-    dir_ = os.path.join(os.getcwd(), str(arguments.year), 'day' + str(arguments.day).zfill(2))
+    dir_ = os.path.join(str(arguments.year), 'day' + day)
     create_day(dir_, arguments, puzzle)
     file = os.path.join(dir_, 'solution.py')
 
@@ -102,7 +108,7 @@ elif 0 < arguments.day < 26:
     part1 = sol.part1
     part2 = sol.part2
     print("Dummy Data")
-    with open(os.path.join(dir_, 'dummy.txt'), "r", encoding='utf-8') as f:
+    with open(os.path.join('data', dir_, 'dummy.txt'), "r", encoding='utf-8') as f:
         data = parse_data(f)
 
     if not arguments.visual:
@@ -126,7 +132,7 @@ elif 0 < arguments.day < 26:
 
         if not arguments.testing:
             print("\nReal Data")
-            with open(os.path.join(dir_, 'data.txt'), "r", encoding='utf-8') as f:
+            with open(os.path.join('data', dir_, 'data.txt'), "r", encoding='utf-8') as f:
                 data = parse_data(f)
 
             start = time.time()
@@ -148,7 +154,7 @@ elif 0 < arguments.day < 26:
             print("Part 2:", ans2, "- Timing:", format_time(time2), ["❌", "✅"][str(solved2) == str(ans2)])
     else:
         if not arguments.testing:
-            with open(os.path.join(dir_, 'data.txt'), "r", encoding='utf-8') as f:
+            with open(os.path.join('data', dir_, 'data.txt'), "r", encoding='utf-8') as f:
                 data = parse_data(f)
 
         file = os.path.join(dir_, 'visual.py')
