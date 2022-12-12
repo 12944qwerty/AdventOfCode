@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Advent of Code. Eric doesn't want people to show their input data
+data.txt
