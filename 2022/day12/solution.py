@@ -84,15 +84,15 @@ def part1(data):
         current = queue.get()[1]
         neighbors = current[-1].neighbors(graph)
         seen.add(current[-1])
-        if end in neighbors:
-            return len(current)
 
         for node in neighbors:
-            if node not in current:
-                minDist = min(node.distance, current[-1].distance + 1)
-                if node not in seen and node.distance != minDist:
-                    node.distance = minDist
-                    queue.put((node.distance, current+[node]))
+            if node == end:
+                return len(current)
+
+            minDist = min(node.distance, current[-1].distance + 1)
+            if node.distance != minDist:
+                node.distance = minDist
+                queue.put((node.distance, current+[node]))
 
 
 def part2(data):
@@ -113,12 +113,9 @@ def part2(data):
             if node.height == 1:
                 possiblePaths.append(len(current))
                 return len(current)
-        else:
-            for node in neighbors:
-                if node not in current:
-                    minDist = min(node.distance, current[-1].distance + 1)
-                    if node not in seen and node.distance != minDist:
-                        node.distance = minDist
-                        queue.put((node.distance, current+[node]))
+            minDist = min(node.distance, current[-1].distance + 1)
+            if node.distance != minDist:
+                node.distance = minDist
+                queue.put((node.distance, current+[node]))
 
     return min(possiblePaths)
