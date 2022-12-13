@@ -49,7 +49,7 @@ def parse_data(f):
     startingIndex = endingIndex = None
     path = [list(a) for a in f.read().splitlines()]
     graph = {}
-    a = []
+
     for i in range(len(path)):
         for j in range(len(path[i])):
             if path[i][j] == 'S':
@@ -60,15 +60,13 @@ def parse_data(f):
                 endingIndex = i, j
             else:
                 path[i][j] = ord(path[i][j]) - 96
-            
-            if path[i][j] == 1:
-                a.append((i, j))
+
             graph[(i, j)] = Node((i, j), path[i][j])
 
-    return graph, startingIndex, endingIndex, a
+    return graph, startingIndex, endingIndex
 
 def part1(data):
-    graph, start, end, _ = data
+    graph, start, end = data
     start = graph[start]
     end = graph[end]
 
@@ -79,7 +77,7 @@ def part1(data):
         neighbors = queue[0][-1].neighbors(graph)
         seen.add(queue[0][-1])
         if end in neighbors:
-            possiblePaths.append(queue[0])
+            possiblePaths.append(len(queue[0]))
 
         for node in neighbors:
             for path in queue:
@@ -90,10 +88,10 @@ def part1(data):
                     queue.append(queue[0]+[node])
         queue.pop(0)
 
-    return len(min(possiblePaths, key=lambda a: len(a)))
+    return min(possiblePaths)
 
 def part2(data):
-    graph, _, start, lowest = data
+    graph, _, start = data
     start = graph[start]
 
     seen = set()

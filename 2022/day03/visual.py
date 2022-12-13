@@ -4,10 +4,10 @@ import time
 ABC = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 def draw_splitter(term):
-    with term.location(term.width // 2, 22):
-        print(term.clear_eol + term.clear_bol, "|")
-    with term.location(term.width // 2 - 1, 23):
-        print(term.clear_eol + term.clear_bol, "/ \\")
+    with term.location(term.width // 2 + 1, 22):
+        print("|")
+    with term.location(term.width // 2, 23):
+        print("/ \\")
 
 def move_line_down(term, first, second, row, delay, total):
     while row < 22:
@@ -21,9 +21,9 @@ def move_line_down(term, first, second, row, delay, total):
     for i in range(3):
         with term.location(term.width // 2 - len(first), row + i):
             print(term.clear_eol + term.clear_bol)
+        with term.location(term.width // 2 - len(first) - 3, row + i + 1):
+            print(term.clear_eol + term.clear_bol + first + '          ' + second)
         draw_splitter(term)
-        with term.location(term.width // 2 - len(first), row + i + 1):
-            print(term.clear_eol + term.clear_bol + first + '       ' + second)
         draw_pipes(term, i)
 
         time.sleep(delay)
