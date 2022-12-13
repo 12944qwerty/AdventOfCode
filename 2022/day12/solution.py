@@ -8,12 +8,15 @@ Part 1: Find shortest path to top of the mountain
 Part 2: 
 """
 
+from queue import PriorityQueue
+
 class Node:
     def __init__(self, position=None, height=None):
         self.position = position
         self.height = height
         self.discovered = False
         self.parent = None
+        self.distance = float("inf")
 
     def neighbors(self, graph, part2=False):
         nodes = []
@@ -42,6 +45,9 @@ class Node:
     def __eq__(self, other):
         return self.position == other.position
 
+    def __lt__(self, other):
+        return self.distance < other.distance
+
     def __hash__(self):
         return int(str(self.position[0]).zfill(3) + str(self.position[1]).zfill(3))
 
@@ -68,51 +74,51 @@ def parse_data(f):
 def part1(data):
     graph, start, end = data
     start = graph[start]
+    start.distance = 0
     end = graph[end]
 
     seen = set()
-    queue = [[start]]
-    possiblePaths = []
-    while len(queue):
-        neighbors = queue[0][-1].neighbors(graph)
-        seen.add(queue[0][-1])
+    queue = PriorityQueue()
+    queue.put((0, [start]))
+    while queue.not_empty:
+        current = queue.get()[1]
+        neighbors = current[-1].neighbors(graph)
+        seen.add(current[-1])
         if end in neighbors:
-            possiblePaths.append(len(queue[0]))
+            return len(current)
 
         for node in neighbors:
-            for path in queue:
-                if node in path:
-                    break
-            else:
-                if node not in seen:
-                    queue.append(queue[0]+[node])
-        queue.pop(0)
+            if node not in current:
+                minDist = min(node.distance, current[-1].distance + 1)
+                if node not in seen and node.distance != minDist:
+                    node.distance = minDist
+                    queue.put((node.distance, current+[node]))
 
-    return min(possiblePaths)
 
 def part2(data):
     graph, _, start = data
     start = graph[start]
+    start.distance = 0
 
     seen = set()
-    queue = [[start]]
+    queue = PriorityQueue()
+    queue.put((0, [start]))
     possiblePaths = []
-    while len(queue):
-        neighbors = queue[0][-1].neighbors(graph, True)
-        seen.add(queue[0][-1])
+    while queue.not_empty:
+        current = queue.get()[1]
+        neighbors = current[-1].neighbors(graph, True)
+        seen.add(current[-1])
 
         for node in neighbors:
             if node.height == 1:
-                possiblePaths.append(len(queue[0]))
-                break
+                possiblePaths.append(len(current))
+                return len(current)
         else:
             for node in neighbors:
-                for path in queue:
-                    if node in path:
-                        break
-                else:
-                    if node not in seen:
-                        queue.append(queue[0]+[node])
-        queue.pop(0)
+                if node not in current:
+                    minDist = min(node.distance, current[-1].distance + 1)
+                    if node not in seen and node.distance != minDist:
+                        node.distance = minDist
+                        queue.put((node.distance, current+[node]))
 
     return min(possiblePaths)
