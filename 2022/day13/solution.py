@@ -6,9 +6,6 @@ Part 2: Sort the entire lists and then multiply the indices of the dividers
 """
 
 from functools import cmp_to_key
-import sys
-
-sys.setrecursionlimit(20000)
 
 def parse_data(f):
     return [a for a in f.read().split('\n\n')]
