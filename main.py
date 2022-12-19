@@ -119,6 +119,7 @@ elif 0 < arguments.day < 26:
         parse_data = sol.parse_data
         part1 = sol.part1
         part2 = sol.part2
+        sol.dummy = True
 
         start = time.time()
         ans1 = part1(deepcopy(data))
@@ -131,6 +132,7 @@ elif 0 < arguments.day < 26:
         print("Part 2:", ans2, "- Timing:", format_time(time2))
 
         if not arguments.testing:
+            sol.dummy = False
             print("\nReal Data")
             with open(os.path.join('data', dir_, 'data.txt'), "r", encoding='utf-8') as f:
                 data = parse_data(f)
