@@ -1,8 +1,8 @@
 """
 Day 15: Beacon Exclusion Zone
 
-Part 1: 
-Part 2: 
+Part 1: Find the number of spots that you know for a fact don't contain a beacon.
+Part 2: Find the only spot that a beacon isn't picked up by a sensor.
 """
 
 import re

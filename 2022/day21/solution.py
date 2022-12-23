@@ -1,31 +1,9 @@
 """
 Day 21: Monkey Math
 
-Part 1:
-Part 2:
+Part 1: What will the "root" monkey say based on who they're listening for?
+Part 2: What do YOU need to say to make the "root" monkey say Truth?
 """
-
-HUMN = None
-
-class Node:
-    def __init__(self, monkeys, children, parent=None):
-        self.parent = parent
-        self.name = children
-        if children == 'humn':
-            global HUMN
-            HUMN = self
-            return
-        children = monkeys[children]
-        if len(children) == 1:
-            self.value = children[0]
-        else:
-            self.first = Node(monkeys, children[0], self)
-            self.op = children[1]
-            self.second = Node(monkeys, children[2], self)
-
-    def __str__(self):
-        return f"<Node name={self.name} parent={self.parent}>"
-
 
 def parse_data(f):
     data = f.read().splitlines()
