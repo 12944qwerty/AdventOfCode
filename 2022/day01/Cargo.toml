@@ -1,0 +1,9 @@
+[package]
+name = "aoc2022day01"
+version = "1.0.0"
+author = "12944qwerty"
+edition = "2021"
+
+[[bin]]
+name = "y22d1"
+path = "solution.rs"
