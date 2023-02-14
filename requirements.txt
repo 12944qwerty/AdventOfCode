@@ -3,7 +3,7 @@ ansicon==1.89.0
 aocd==0.1
 beautifulsoup4==4.11.1
 blessed==1.19.1
-certifi==2022.9.24
+certifi==2022.12.7
 charset-normalizer==2.1.1
 colorama==0.4.6
 idna==3.4
