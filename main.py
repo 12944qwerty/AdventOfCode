@@ -24,6 +24,7 @@ parser.add_argument('--day', '-d', nargs='?', default=[None,today.day][today.mon
 parser.add_argument('--create', '-c', action='store_true', help="Just creates the folder")
 parser.add_argument('--testing', '-t', action='store_true', help="Only run dummy.txt")
 parser.add_argument('--visual', '-v', action='store_true', help="Run the visualization")
+parser.add_argument('--part', '-p', nargs='?', default="", help="Run only 1, 2 or both (default)", type=str)
 
 arguments = parser.parse_args()
 
@@ -121,15 +122,17 @@ elif 0 < arguments.day < 26:
         part2 = sol.part2
         sol.dummy = True
 
-        start = time.time()
-        ans1 = part1(deepcopy(data))
-        time1 = time.time() - start
-        print("Part 1:", ans1, "- Timing:", format_time(time1))
+        if arguments.part == "" or arguments.part == "1":
+            start = time.time()
+            ans1 = part1(deepcopy(data))
+            time1 = time.time() - start
+            print("Part 1:", ans1, "- Timing:", format_time(time1))
 
-        start = time.time()
-        ans2 = part2(deepcopy(data))
-        time2 = time.time() - start
-        print("Part 2:", ans2, "- Timing:", format_time(time2))
+        if arguments.part == "" or arguments.part == "2":
+            start = time.time()
+            ans2 = part2(deepcopy(data))
+            time2 = time.time() - start
+            print("Part 2:", ans2, "- Timing:", format_time(time2))
 
         if not arguments.testing:
             sol.dummy = False
@@ -137,23 +140,25 @@ elif 0 < arguments.day < 26:
             with open(os.path.join('data', dir_, 'data.txt'), "r", encoding='utf-8') as f:
                 data = parse_data(f)
 
-            start = time.time()
-            ans1 = part1(deepcopy(data))
-            time1 = time.time() - start
-            try:
-                solved1 = puzzle._get_answer('a')
-            except aocd.exceptions.PuzzleUnsolvedError:
-                solved1 = None
-            print("Part 1:", ans1, "- Timing:", format_time(time1), ["❌", "✅"][str(solved1) == str(ans1)])
+            if arguments.part == "" or arguments.part == "1":
+                start = time.time()
+                ans1 = part1(deepcopy(data))
+                time1 = time.time() - start
+                try:
+                    solved1 = puzzle._get_answer('a')
+                except aocd.exceptions.PuzzleUnsolvedError:
+                    solved1 = None
+                print("Part 1:", ans1, "- Timing:", format_time(time1), ["❌", "✅"][str(solved1) == str(ans1)])
 
-            start = time.time()
-            ans2 = part2(deepcopy(data))
-            time2 = time.time() - start
-            try:
-                solved2 = puzzle._get_answer('b')
-            except aocd.exceptions.PuzzleUnsolvedError:
-                solved2 = None
-            print("Part 2:", ans2, "- Timing:", format_time(time2), ["❌", "✅"][str(solved2) == str(ans2)])
+            if arguments.part == "" or arguments.part == "2":
+                start = time.time()
+                ans2 = part2(deepcopy(data))
+                time2 = time.time() - start
+                try:
+                    solved2 = puzzle._get_answer('b')
+                except aocd.exceptions.PuzzleUnsolvedError:
+                    solved2 = None
+                print("Part 2:", ans2, "- Timing:", format_time(time2), ["❌", "✅"][str(solved2) == str(ans2)])
     else:
         if not arguments.testing:
             with open(os.path.join('data', dir_, 'data.txt'), "r", encoding='utf-8') as f:
