@@ -39,6 +39,9 @@ def part2(data):
     h = 0
     for i in range(time):
         if (time - i) * i > record:
-            h += 1
-            
-    return h
+            h = i
+            break
+        
+    for i in range(time, 0, -1):
+        if (time - i) * i > record:
+            return i - h + 1
