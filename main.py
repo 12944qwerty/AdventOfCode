@@ -55,7 +55,7 @@ from math import gcd, lcm, floor, ceil, sqrt, prod
 from utils import grid, number_re
 
 def parse_data(f):
-    return [a for a in f.read().split("\n")]
+    return [a for a in f.read().split("\\n")]
 
 def part1(data):
     sum = 0
