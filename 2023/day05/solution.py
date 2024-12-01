@@ -6,7 +6,6 @@ Part 2: I got the correct answer with the wrong solution. Didn't work for exampl
 """
 from functools import lru_cache
 
-
 def parse_data(f):
     return [a.splitlines() for a in f.read().split("\n\n")]
 
@@ -32,79 +31,28 @@ def part1(data):
     return min(newseeds)
 
 def part2(data):
-    s = list(map(int, data[0][0].split(": ")[1].split(" ")))
-    seeds = []
-    for i in range(0, len(s), 2):
-        seeds += [[s[i], s[i+1]]]
-        
-    mapping = []
+    seeds = list(map(int, data[0][0].split(": ")[1].split(" ")))   
+    
+    mapping = {}
     for cat in data[1:]:
-        new = []
+        key = cat[0].split(" map:")[0]
+        mapping[key] = []
         for line in cat[1:]:
             vals = list(map(int, line.split(" ")))
-            new.append(tuple(vals))
-        
-        mapping.append(tuple(new))
-    mapping = tuple(mapping)
+            mapping[key].append(vals)
             
-    @lru_cache(maxsize=2**5)
-    def get_seed(start, range, mapping):
-        allseeds = []
-        if len(mapping) == 1:
-            for entry in mapping[0]:
-                if start >= entry[1] + entry[2] or start + range < entry[1]:
-                    continue
-                
-                a = max(start, entry[1]) - entry[1] + entry[0]
-                allseeds.append(a)
-                
-            minentry = min(mapping[0], key=lambda x: x[1])
-            maxentry = max(mapping[0], key=lambda x: x[1] + x[2])
-            
-            if start < minentry[1]:
-                a = start
-                allseeds.append(a)
-                
-            a = maxentry[1] + maxentry[2]
-            if start + range > a:
-                allseeds.append(a)
-                
-            if len(allseeds) == 0:
-                return start
-
-            return min(allseeds)
-        
-        for entry in mapping[0]:
-            if start >= entry[1] + entry[2] or start + range < entry[1]:
-                continue
-                     
-            a = max(start, entry[1]) - entry[1] + entry[0]
-            b = min(start + range, entry[1] + entry[2]) - max(start, entry[1])
-            allseeds.append(get_seed(a, b, mapping[1:]))
-        
-        minentry = min(mapping[0], key=lambda x: x[1])
-        maxentry = max(mapping[0], key=lambda x: x[1] + x[2])
-        
-        if start < minentry[1]:
-            a = start
-            b = minentry[1] - a
-            allseeds.append(get_seed(a, b, mapping[1:]))
-            
-        a = maxentry[1] + maxentry[2]
-        if start + range > a:
-            b = start + range - a
-            allseeds.append(get_seed(a, b, mapping[1:]))
-            
-        if len(allseeds) == 0:
-            return get_seed(start, range, mapping[1:])
-        
-        return min(allseeds)
-        
     newseeds = []
-    for a, b in seeds:
-        seed = get_seed(a, b, mapping)
-        
-        newseeds.append(seed)    
-   
-        
+    
+    i = 0
+    for a in range(0, len(seeds), 2):
+        for seed in range(seeds[a], seeds[a] + seeds[a+1]+1):
+            for key, val in mapping.items():
+                for entry in val:
+                    if seed >= entry[1] and seed < entry[1] + entry[2]:
+                        seed = seed - entry[1] + entry[0]
+                        break
+            newseeds.append(seed)   
+            i += 1
+            if i % 1000000 == 0:
+                print(i) 
     return min(newseeds)

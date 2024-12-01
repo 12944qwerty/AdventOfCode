@@ -7,6 +7,10 @@ from typing import Any, Callable, Dict, List, Tuple
 class Grid:
     def __init__(self, grid: Dict[Tuple[int, int], Any]):
         self.grid = grid
+        
+    @classmethod
+    def from_list(cls, grid: List[List[Any]]):
+        return cls({(x, y): grid[y][x] for y in range(len(grid)) for x in range(len(grid[y]))})
 
     @property
     def minx(self) -> int:
@@ -26,11 +30,21 @@ class Grid:
 
     @property
     def width(self) -> int:
-        return self.maxx - self.minx
+        return self.maxx - self.minx + 1
 
     @property
     def height(self) -> int:
-        return self.maxy - self.miny
+        return self.maxy - self.miny + 1
+    
+    @property
+    def size(self) -> int:
+        return self.width * self.height
+    
+    def rangex(self, step: int=1) -> range:
+        return range(self.minx, self.maxx + 1, step)
+    
+    def rangey(self, step: int=1) -> range:
+        return range(self.miny, self.maxy + 1, step)
 
     def neighbors(self, x: int, y: int, *, diagonals=False, check: Callable[[Any, Any], bool]=None) -> List[Tuple[int, int]]:
         near = [(0, 1), (1, 0), (0, -1), (-1, 0)]
@@ -69,3 +83,12 @@ class Grid:
         
     def __iter__(self):
         return iter(self.grid.keys())
+    
+    def __str__(self):
+        msg = ""
+        for y in range(self.miny, self.maxy + 1):
+            for x in range(self.minx, self.maxx + 1):
+                msg += str(self.grid.get((x, y), " "))
+            msg += "\n"
+            
+        return msg
