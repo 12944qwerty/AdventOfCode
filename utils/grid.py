@@ -5,7 +5,7 @@ A 2D or 3D grid with common features like neighbors, and more.
 from typing import Any, Callable, Dict, Generator, List, Tuple
 
 class Grid:
-    def __init__(self, grid: Dict[Tuple[int, int], Any]):
+    def __init__(self, grid: Dict[Tuple[int, int], Any] = {}):
         self.grid = grid
         
     @classmethod
