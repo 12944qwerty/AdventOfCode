@@ -2,7 +2,7 @@
 A 2D or 3D grid with common features like neighbors, and more.
 """
 
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Any, Callable, Dict, Generator, List, Tuple
 
 class Grid:
     def __init__(self, grid: Dict[Tuple[int, int], Any]):
@@ -40,11 +40,17 @@ class Grid:
     def size(self) -> int:
         return self.width * self.height
     
-    def rangex(self, step: int=1) -> range:
-        return range(self.minx, self.maxx + 1, step)
+    def rangex(self, step: int=1) -> Generator[int, None, None]:
+        i = self.minx
+        while i <= self.maxx:
+            yield i
+            i += step
     
-    def rangey(self, step: int=1) -> range:
-        return range(self.miny, self.maxy + 1, step)
+    def rangey(self, step: int=1) -> Generator[int, None, None]:
+        i = self.miny
+        while i <= self.maxy:
+            yield i
+            i += step
 
     def neighbors(self, x: int, y: int, *, diagonals=False, check: Callable[[Any, Any], bool]=None) -> List[Tuple[int, int]]:
         near = [(0, 1), (1, 0), (0, -1), (-1, 0)]
