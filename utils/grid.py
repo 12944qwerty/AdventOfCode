@@ -3,9 +3,10 @@ A 2D or 3D grid with common features like neighbors, and more.
 """
 
 from typing import Any, Callable, Dict, Generator, List, Tuple
+from collections import defaultdict
 
 class Grid:
-    def __init__(self, grid: Dict[Tuple[int, int], Any] = {}):
+    def __init__(self, grid: Dict[Tuple[int, int], Any] = defaultdict(int)):
         self.grid = grid
         
     @classmethod
@@ -89,6 +90,11 @@ class Grid:
         
     def __iter__(self):
         return iter(self.grid.keys())
+    
+    def coords(self) -> Generator[Tuple[int, int], None, None]:
+        for y in range(self.miny, self.maxy + 1):
+            for x in range(self.minx, self.maxx + 1):
+                yield x, y
     
     def __str__(self):
         msg = ""

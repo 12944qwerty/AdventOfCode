@@ -60,7 +60,7 @@ from functools import lru_cache
 from itertools import combinations, permutations, product, combinations_with_replacement
 from collections import Counter, defaultdict, deque
 from math import gcd, lcm, floor, ceil, sqrt, prod
-from utils import Grid, Maze, number_re, get_numbers
+from utils import *
 
 def parse_data(f):
     return [a for a in f.read().split("\\n")]
