@@ -86,7 +86,7 @@ class Grid:
         self.grid[key] = value
 
     def __getitem__(self, item: Tuple[int, int]) -> Any:
-        return self.grid[item]
+        return self.grid.get(item, ".")
         
     def __iter__(self):
         return iter(self.grid.keys())
