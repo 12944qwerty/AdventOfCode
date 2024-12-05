@@ -5,6 +5,7 @@ Utils Module to quickly work with common concepts.
 from .grid import Grid
 from .maze import Maze
 from .graph import *
+from .delist import delist
 import re
 
 number_re = re.compile(r'-?\d+')

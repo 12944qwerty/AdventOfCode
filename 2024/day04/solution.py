@@ -26,7 +26,6 @@ def part1(data):
                     if g[mcoord[0]+dx, mcoord[1]+dy] == "A":
                         if g[mcoord[0]+2*dx, mcoord[1]+2*dy] == "S":
                             sum += 1
-                    
                                     
     return sum
 
